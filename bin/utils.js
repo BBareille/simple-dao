@@ -153,7 +153,7 @@ async function DAOSample(className){
         "        })\n" +
         "    }"
 
-    repoSample +="\nsave"+className+"("+className+"){\nconnection.query('USE "+process.env.DATABASE_NAME +"')\n connection.query('INSERT INTO "+className+" (name) VALUES (\'+ "+className+".name+\')')\nreturn "+className+";\n }"
+    repoSample +="\nsave"+className+"("+className+"){\nconnection.query('USE "+process.env.DATABASE_NAME +"')\n connection.query('INSERT INTO "+className+" (name) VALUES (JSON.stringify("+className+".name))')\nreturn "+className+";\n }"
     repoSample +="\nremove"+className+"(id){\n" +
         "        connection.query('USE "+process.env.DATABASE_NAME +"')\n"+
         "        connection.query('DELETE FROM "+className+" where id='+ id)\n" +

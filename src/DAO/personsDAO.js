@@ -29,7 +29,7 @@ async getOnepersons(id){
     }
 savepersons(persons){
 connection.query('USE newdb')
- connection.query('INSERT INTO persons (name) VALUES ('+ persons.name+')')
+ connection.query('INSERT INTO persons (name) VALUES (JSON.stringify(persons.name))')
 return persons;
  }
 removepersons(id){

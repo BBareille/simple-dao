@@ -29,7 +29,7 @@ async getOnecity(id){
     }
 savecity(city){
 connection.query('USE newdb')
- connection.query('INSERT INTO city (name) VALUES ('+ city.name+')')
+ connection.query('INSERT INTO city (name) VALUES (JSON.stringify(city.name))')
 return city;
  }
 removecity(id){

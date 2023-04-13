@@ -26,7 +26,7 @@ router.post('/new', function (req, res){
     newcity.setname(req.body.name);
     (async ()=> {
         let cityDao = new cityDAO()
-        let cityList = (await cityDao.savecity(newcity))
+        let cityList = cityDao.savecity(newcity)
         res.send(JSON.stringify(cityList))
     })();
 })
