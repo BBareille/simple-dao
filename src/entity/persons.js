@@ -5,41 +5,41 @@ firstName
 address
 city
 	constructor(id,lastName,firstName,address,city) {
-		id = this.id
-		lastName = this.lastName
-		firstName = this.firstName
-		address = this.address
-		city = this.city
+		this.id = id
+		this.lastName = lastName
+		this.firstName = firstName
+		this.address = address
+		this.city = city
 	}
 	getid(){
 		return this.id
 	};
 	setid(id){
-		id = this.id
+		this.id = id 
 	};
 	getlastName(){
 		return this.lastName
 	};
 	setlastName(lastName){
-		lastName = this.lastName
+		this.lastName = lastName 
 	};
 	getfirstName(){
 		return this.firstName
 	};
 	setfirstName(firstName){
-		firstName = this.firstName
+		this.firstName = firstName 
 	};
 	getaddress(){
 		return this.address
 	};
 	setaddress(address){
-		address = this.address
+		this.address = address 
 	};
 	getcity(){
 		return this.city
 	};
 	setcity(city){
-		city = this.city
+		this.city = city 
 	};
 };
 module.exports = {persons}

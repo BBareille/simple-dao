@@ -5,6 +5,7 @@ class personsDAO{
 async getAllpersons(){
         let personsList = [];
         return await new Promise((res, rej) => {
+        connection.query('USE newdb')
             connection.query('SELECT * FROM persons', function (err, rows, fields ){
                 for(let row of rows){
                     let newpersons = new persons(row.name, row.id)
@@ -17,6 +18,7 @@ async getAllpersons(){
     }
 async getOnepersons(id){
         return await new Promise((res, rej)=>{
+        connection.query('USE newdb')
             connection.query('SELECT * FROM persons WHERE id=' + id, function (err, rows, fields){
                 for (let row of rows){
                     let newpersons = new persons(row.name, row.id)
@@ -26,10 +28,12 @@ async getOnepersons(id){
         })
     }
 savepersons(persons){
+connection.query('USE newdb')
  connection.query('INSERT INTO persons (name) VALUES ('+ persons.name+')')
 return persons;
  }
 removepersons(id){
+        connection.query('USE newdb')
         connection.query('DELETE FROM persons where id='+ id)
         return;
     }

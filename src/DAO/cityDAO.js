@@ -5,10 +5,10 @@ class cityDAO{
 async getAllcity(){
         let cityList = [];
         return await new Promise((res, rej) => {
-            connection.query('Use '+ process.env.DATABASE_NAME)
+        connection.query('USE newdb')
             connection.query('SELECT * FROM city', function (err, rows, fields ){
                 for(let row of rows){
-                    let newcity = new city(row.id, row.name)
+                    let newcity = new city(row.name, row.id)
                     cityList.push(newcity)
                 }
                 res(cityList)
@@ -18,6 +18,7 @@ async getAllcity(){
     }
 async getOnecity(id){
         return await new Promise((res, rej)=>{
+        connection.query('USE newdb')
             connection.query('SELECT * FROM city WHERE id=' + id, function (err, rows, fields){
                 for (let row of rows){
                     let newcity = new city(row.name, row.id)
@@ -27,10 +28,12 @@ async getOnecity(id){
         })
     }
 savecity(city){
+connection.query('USE newdb')
  connection.query('INSERT INTO city (name) VALUES ('+ city.name+')')
 return city;
  }
 removecity(id){
+        connection.query('USE newdb')
         connection.query('DELETE FROM city where id='+ id)
         return;
     }

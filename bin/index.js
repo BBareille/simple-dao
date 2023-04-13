@@ -39,35 +39,15 @@ if(yargs.argv.ce == true || yargs.argv.createEntity == true){
     utils.createEntity();
     return;
 }
-if(yargs.argv.getAllCity == true){
-    // (async () => {
-    //     let dao = new cityDAO()
-    //     console.log(await dao.getAllcity())
-    // })()
-    // let dao = new cityDAO()
-    // dao.getAllcity()
-    //     .then(res => console.log(res))
-    //     .catch(err => console.log(err))
-    // let cityList = dao.getAllcity()
-    // console.log(cityList)
-    // return;
+if(yargs.argv.createServer == true) {
+    utils.createServer();
+    return;
 }
-// if(yargs.argv.getOne == true){
-//     (async () => {
-//         let dao = new CityDao()
-//         console.log(await dao.getOneCity(3))
-//     })()
-//     return;
-// }
-// if(yargs.argv.save == true){
-//     (async () => {
-//         let dao = new CityDao()
-//         let newCity = new city()
-//         newCity.setname('Austerlitz')
-//         dao.saveCity(newCity)
-//     })()
-//     return;
-// }
+if(yargs.argv.createRoute == true) {
+    utils.createRoute();
+    return;
+}
+
 
 
 

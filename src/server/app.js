@@ -1,21 +1,13 @@
-const http = require('http');
-const {cityDAO} = require('../DAO/cityDAO.js')
-const {city} = require('../Entity/city.js')
+const express = require('express')
+const app = express()
 
-const hostname = '127.0.0.1';
-const port = 3000;
+const port = 3000
+app.use(express.json())
 
-const server = http.createServer((req, res) => {
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'application/json');
-    (async ()=> {
-        let cityDao = new cityDAO()
-        let cityList = (await cityDao.getAllcity())
-        res.end(JSON.stringify(cityList))
-    })();
-});
+app.use("/city",require("./routes/city-routes"))
+app.use("/persons",require("./routes/persons-routes"))
+app.use("/user",require("./routes/user-routes"))
 
-
-server.listen(port, hostname, () => {
-    console.log(`Server running at http://${hostname}:${port}/`);
-});
+app.listen(port, () => {
+    console.log(`App running on 127.0.0.1:${port}`)
+})

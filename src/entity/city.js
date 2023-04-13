@@ -9,13 +9,13 @@ name
 		return this.id
 	};
 	setid(id){
-		this.id = id
+		this.id = id 
 	};
 	getname(){
 		return this.name
 	};
 	setname(name){
-		this.name = name
+		this.name = name 
 	};
 };
 module.exports = {city}

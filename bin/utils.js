@@ -106,14 +106,14 @@ async function classSample(className){
     //Constructor
     classSample += '\tconstructor('+listOfProperty.toString()+') {\n'
         for(let i=0; i<listOfProperty.length; i++){
-            classSample += '\t\t'+listOfProperty[i]+" = this."+listOfProperty[i]+"\n"
+            classSample +="\t\tthis."+listOfProperty[i]+  " = "+listOfProperty[i]+'\n'
         }
         classSample += "\t}"
 
     //Getter & Setter
     listOfProperty.map(property => {
         classSample+= "\n\tget"+property+"(){\n\t\treturn this."+property+"\n\t};"
-        classSample+= "\n\tset"+property+"("+property+"){\n\t\t"+property+" = this."+property+"\n\t};"
+        classSample+= "\n\tset"+property+"("+property+"){\n\t\tthis."+property+" = "+property+" \n\t};"
     })
 
     classSample+= "\n};"
@@ -130,6 +130,7 @@ async function DAOSample(className){
     repoSample += "async getAll"+className+"(){\n" +
         "        let "+className+"List = [];\n" +
         "        return await new Promise((res, rej) => {\n" +
+        "        connection.query('USE "+process.env.DATABASE_NAME +"')\n"+
         "            connection.query('SELECT * FROM "+className+"', function (err, rows, fields ){\n" +
         "                for(let row of rows){\n" +
         "                    let new"+className+" = new "+className+"(row.name, row.id)\n" +
@@ -142,6 +143,7 @@ async function DAOSample(className){
         "    }"
     repoSample += "\nasync getOne"+className+"(id){\n" +
         "        return await new Promise((res, rej)=>{\n" +
+        "        connection.query('USE "+process.env.DATABASE_NAME +"')\n"+
         "            connection.query('SELECT * FROM "+className+" WHERE id=' + id, function (err, rows, fields){\n" +
         "                for (let row of rows){\n" +
         "                    let new"+className+" = new "+className+"(row.name, row.id)\n" +
@@ -151,8 +153,9 @@ async function DAOSample(className){
         "        })\n" +
         "    }"
 
-    repoSample +="\nsave"+className+"("+className+"){\n connection.query('INSERT INTO "+className+" (name) VALUES (\'+ "+className+".name+\')')\nreturn "+className+";\n }"
+    repoSample +="\nsave"+className+"("+className+"){\nconnection.query('USE "+process.env.DATABASE_NAME +"')\n connection.query('INSERT INTO "+className+" (name) VALUES (\'+ "+className+".name+\')')\nreturn "+className+";\n }"
     repoSample +="\nremove"+className+"(id){\n" +
+        "        connection.query('USE "+process.env.DATABASE_NAME +"')\n"+
         "        connection.query('DELETE FROM "+className+" where id='+ id)\n" +
         "        return;\n" +
         "    }"
@@ -162,14 +165,108 @@ async function DAOSample(className){
     return repoSample
 }
 
+async function createServer(){
+    let tableList = await getTable();
+    try {
+        if (!fs.existsSync('./src')) {
+            fs.mkdirSync('./src');
+            fs.mkdirSync('./src/server');
+        }
+        else if(!fs.existsSync('./src/server')){
+            fs.mkdirSync('./src/server')
+        }
+    } catch (err) {
+        console.error(err);
+    }
+    let appData = "const express = require('express')\n" +
+        "const app = express()\n" +
+        "\n" +
+        "const port = 3000\n" +
+        "app.use(express.json())\n" +
+        "\n";
+        tableList.map(tableName => {
+            appData += `app.use("/${tableName}",require("./routes/${tableName}-routes"))\n`
+        })
+    appData +=
+        "app.listen(port, () => {\n" +
+        "    console.log(`App running on 127.0.0.1:${port}`)\n" +
+        "})";
+
+
+    fs.writeFile('./src/server/app.js', appData, function (err){
+        if(err) throw err;
+    })
+
+}
+async function createRoute(){
+    let tableList = await getTable();
+    try {
+        if (!fs.existsSync('./src/server/routes')) {
+            fs.mkdirSync('./src/server/routes');
+        }
+    } catch (err) {
+        console.error(err);
+    }
+    tableList.map(tableName => {
+        let tableData = "const router = require('express').Router();\n" +
+            `const {${tableName}DAO} = require('../../DAO/${tableName}DAO.js')\n` +
+            `const {${tableName}} = require('../../entity/${tableName}')\n` +
+            "router.get('/all', function (req, res){\n" +
+            "    res.append('Content-Type', 'application/json');\n" +
+            "    (async ()=> {\n" +
+            `        let ${tableName}Dao = new ${tableName}DAO()\n` +
+            `        let ${tableName}List = (await ${tableName}Dao.getAll${tableName}())\n` +
+            `        res.send(JSON.stringify(${tableName}List))\n` +
+            "    })();\n" +
+            "})\n" +
+            "\n" +
+            "router.get('/one/:id', function (req, res){\n" +
+            "    res.append('Content-Type', 'application/json');\n" +
+            "    (async ()=> {\n" +
+            `        let ${tableName}Dao = new ${tableName}DAO()\n` +
+            `        let ${tableName}List = (await ${tableName}Dao.getOne${tableName}(req.params.id))\n` +
+            `        res.send(JSON.stringify(${tableName}List))\n` +
+            "    })();\n" +
+            "})\n" +
+            "\n" +
+            "router.post('/new', function (req, res){\n" +
+            "    res.append('Content-Type', 'application/json');\n" +
+            "    console.log(req.body);\n" +
+            `    let new${tableName} = new ${tableName}();\n` +
+            `    new${tableName}.setname(req.body.name);\n` +
+            "    (async ()=> {\n" +
+            `        let ${tableName}Dao = new ${tableName}DAO()\n` +
+            `        let ${tableName}List = (await ${tableName}Dao.save${tableName}(new${tableName}))\n ` +
+            `       res.send(JSON.stringify(${tableName}List))\n` +
+            "    })();\n" +
+            "})\n" +
+            "router.post('/delete/:id', function (req, res){\n" +
+            "    res.append('Content-Type', 'application/json');\n" +
+            "    (async ()=> {\n" +
+            `        let ${tableName}Dao = new ${tableName}DAO()\n ` +
+            `        let ${tableName}List = (await cityDao.remove${tableName}(req.params.id))\n ` +
+            `        res.send(JSON.stringify(${tableName}List))\n` +
+            "    })();\n" +
+            "})\n" +
+            "\n" +
+            "module.exports = router"
+        fs.writeFile(`./src/server/routes/${tableName}-routes.js`, tableData, function (err){
+            if(err) throw err;
+        })
+    })
+
+}
+
 
 
 module.exports = {
-    getConnection: getConnection,
-    createDatabase: createDatabase,
-    deleteDatabase: deleteDatabase,
-    getDatabaseList: getDatabaseList,
-    getTable: getTable,
-    getTableDetails: getTableDetails,
-    createEntity: createEntity,
+    getConnection,
+    createDatabase,
+    deleteDatabase,
+    getDatabaseList,
+    getTable,
+    getTableDetails,
+    createEntity,
+    createServer,
+    createRoute
 }

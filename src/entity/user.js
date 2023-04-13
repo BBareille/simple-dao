@@ -3,27 +3,27 @@ id
 username
 password
 	constructor(id,username,password) {
-		id = this.id
-		username = this.username
-		password = this.password
+		this.id = id
+		this.username = username
+		this.password = password
 	}
 	getid(){
 		return this.id
 	};
 	setid(id){
-		id = this.id
+		this.id = id 
 	};
 	getusername(){
 		return this.username
 	};
 	setusername(username){
-		username = this.username
+		this.username = username 
 	};
 	getpassword(){
 		return this.password
 	};
 	setpassword(password){
-		password = this.password
+		this.password = password 
 	};
 };
 module.exports = {user}

@@ -5,6 +5,7 @@ class userDAO{
 async getAlluser(){
         let userList = [];
         return await new Promise((res, rej) => {
+        connection.query('USE newdb')
             connection.query('SELECT * FROM user', function (err, rows, fields ){
                 for(let row of rows){
                     let newuser = new user(row.name, row.id)
@@ -17,6 +18,7 @@ async getAlluser(){
     }
 async getOneuser(id){
         return await new Promise((res, rej)=>{
+        connection.query('USE newdb')
             connection.query('SELECT * FROM user WHERE id=' + id, function (err, rows, fields){
                 for (let row of rows){
                     let newuser = new user(row.name, row.id)
@@ -26,10 +28,12 @@ async getOneuser(id){
         })
     }
 saveuser(user){
+connection.query('USE newdb')
  connection.query('INSERT INTO user (name) VALUES ('+ user.name+')')
 return user;
  }
 removeuser(id){
+        connection.query('USE newdb')
         connection.query('DELETE FROM user where id='+ id)
         return;
     }
