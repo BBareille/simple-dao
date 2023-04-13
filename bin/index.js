@@ -1,8 +1,6 @@
 #! /usr/bin/env node
 const yargs = require("yargs");
 const utils = require('./utils.js')
-// const {CityDao} = require("../src/DAO/cityDAO");
-// const {city} = require("../src/entity/city");
 
 const usage = "\nUsage: dao-test <schema_name> schema to analyze";
 const options = yargs
@@ -41,13 +39,19 @@ if(yargs.argv.ce == true || yargs.argv.createEntity == true){
     utils.createEntity();
     return;
 }
-// if(yargs.argv.getAllCity == true){
-//     (async () => {
-//         let dao = new CityDao()
-//         console.log(await dao.getAllCity())
-//     })()
-//     return;
-// }
+if(yargs.argv.getAllCity == true){
+    // (async () => {
+    //     let dao = new cityDAO()
+    //     console.log(await dao.getAllcity())
+    // })()
+    // let dao = new cityDAO()
+    // dao.getAllcity()
+    //     .then(res => console.log(res))
+    //     .catch(err => console.log(err))
+    // let cityList = dao.getAllcity()
+    // console.log(cityList)
+    // return;
+}
 // if(yargs.argv.getOne == true){
 //     (async () => {
 //         let dao = new CityDao()

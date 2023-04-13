@@ -1,5 +1,6 @@
-const utils = require('../../bin/utils.js')
-const connection = utils.getConnection()
+const utils = require('../../bin/utils.js');
+const connection = utils.getConnection();
+const {persons} = require('../entity/persons.js');  
 class personsDAO{
 async getAllpersons(){
         let personsList = [];
@@ -23,6 +24,14 @@ async getOnepersons(id){
                 }
             })
         })
+    }
+savepersons(persons){
+ connection.query('INSERT INTO persons (name) VALUES ('+ persons.name+')')
+return persons;
+ }
+removepersons(id){
+        connection.query('DELETE FROM persons where id='+ id)
+        return;
     }
 };
 module.exports = {personsDAO: personsDAO}

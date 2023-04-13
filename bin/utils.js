@@ -1,7 +1,6 @@
 const yargs = require("yargs");
 const mysql = require('mysql');
 const fs = require('fs');
-// const {city} = require("../src/entity/city");
 require('dotenv').config();
 
 const getConnection = () => {
@@ -103,6 +102,14 @@ async function classSample(className){
     let classSample = "class "+ className + "{\n"
     //Property
     listOfProperty.map(property => classSample+= property+"\n")
+
+    //Constructor
+    classSample += '\tconstructor('+listOfProperty.toString()+') {\n'
+        for(let i=0; i<listOfProperty.length; i++){
+            classSample += '\t\t'+listOfProperty[i]+" = this."+listOfProperty[i]+"\n"
+        }
+        classSample += "\t}"
+
     //Getter & Setter
     listOfProperty.map(property => {
         classSample+= "\n\tget"+property+"(){\n\t\treturn this."+property+"\n\t};"
@@ -110,13 +117,15 @@ async function classSample(className){
     })
 
     classSample+= "\n};"
+    classSample+= "\nmodule.exports = {"+className+"}"
 
     return classSample
 }
 
 async function DAOSample(className){
-    let repoSample = 'const utils = require(\'../../bin/utils.js\')\n' +
-        'const connection = utils.getConnection()'
+    let repoSample = 'const utils = require(\'../../bin/utils.js\');\n' +
+        'const connection = utils.getConnection();\n'
+           + 'const {'+className+'} = require(\'../entity/'+className+'.js\');  '
     repoSample += "\nclass " + className + "DAO{\n"
     repoSample += "async getAll"+className+"(){\n" +
         "        let "+className+"List = [];\n" +
@@ -142,16 +151,12 @@ async function DAOSample(className){
         "        })\n" +
         "    }"
 
-    //
-    // saveCity(City){
-    //     connection.query('INSERT INTO city (name) VALUES (\''+ City.name+'\')')
-    //     return City;
-    // }
-    //
-    // removeCity(id){
-    //     connection.query('DELETE FROM City where id='+ id)
-    //     return;
-    // }
+    repoSample +="\nsave"+className+"("+className+"){\n connection.query('INSERT INTO "+className+" (name) VALUES (\'+ "+className+".name+\')')\nreturn "+className+";\n }"
+    repoSample +="\nremove"+className+"(id){\n" +
+        "        connection.query('DELETE FROM "+className+" where id='+ id)\n" +
+        "        return;\n" +
+        "    }"
+
     repoSample += "\n};"
     repoSample += "\nmodule.exports = {"+className+"DAO: "+className+"DAO}"
     return repoSample

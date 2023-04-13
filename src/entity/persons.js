@@ -1,38 +1,45 @@
 class persons{
 id
-LastName
-FirstName
-Address
-City
-
+lastName
+firstName
+address
+city
+	constructor(id,lastName,firstName,address,city) {
+		id = this.id
+		lastName = this.lastName
+		firstName = this.firstName
+		address = this.address
+		city = this.city
+	}
 	getid(){
 		return this.id
 	};
 	setid(id){
 		id = this.id
 	};
-	getLastName(){
-		return this.LastName
+	getlastName(){
+		return this.lastName
 	};
-	setLastName(LastName){
-		LastName = this.LastName
+	setlastName(lastName){
+		lastName = this.lastName
 	};
-	getFirstName(){
-		return this.FirstName
+	getfirstName(){
+		return this.firstName
 	};
-	setFirstName(FirstName){
-		FirstName = this.FirstName
+	setfirstName(firstName){
+		firstName = this.firstName
 	};
-	getAddress(){
-		return this.Address
+	getaddress(){
+		return this.address
 	};
-	setAddress(Address){
-		Address = this.Address
+	setaddress(address){
+		address = this.address
 	};
-	getCity(){
-		return this.City
+	getcity(){
+		return this.city
 	};
-	setCity(City){
-		City = this.City
+	setcity(city){
+		city = this.city
 	};
 };
+module.exports = {persons}
