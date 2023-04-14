@@ -1,6 +1,8 @@
 #! /usr/bin/env node
 const yargs = require("yargs");
 const utils = require('./utils.js')
+const {DatabaseConnection} = require("./DatabaseConnection");
+const {FileMaker} = require("./FileMaker");
 
 const usage = "\nUsage: DAOGEN <option> ";
 const options = yargs
@@ -14,20 +16,19 @@ const options = yargs
     .argv;
 
 if(yargs.argv.cd == true || yargs.argv.createDatabase == true ){
-    utils.createDatabase();
+    new DatabaseConnection().createDatabase();
     return;
 }
 if(yargs.argv.dd == true || yargs.argv.dropDatabase == true){
-    utils.deleteDatabase();
+    new DatabaseConnection().deleteDatabase();
     return;
 }
 if(yargs.argv.CDAO == true || yargs.argv.createDAO == true || yargs.argv[2] == "create:DAO"){
-    utils.createEntity();
+    new FileMaker().createModel()
     return;
 }
 if(yargs.argv.createServer == true || yargs.argv[2] == "create:serv") {
-    utils.createServer();
-    utils.createRoute();
+    new FileMaker().createServer()
     console.log('Use : \n\tnodemon ./src/server/app.js\n\nThanks to use my lib !')
     return;
 }
