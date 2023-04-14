@@ -1,4 +1,3 @@
-const yargs = require("yargs");
 const mysql = require('mysql');
 const fs = require('fs');
 require('dotenv').config();
@@ -74,6 +73,7 @@ async function createEntity(){
         }
         else if(!fs.existsSync('./src/entity')){
             fs.mkdirSync('./src/entity')
+            fs.mkdirSync('./src/DAO')
         }
         else if(!fs.existsSync('./src/DAO')){
             fs.mkdirSync('./src/DAO')
@@ -124,7 +124,14 @@ async function classSample(className){
 
 async function DAOSample(className){
     let tableDetails = await getTableDetails(className)
-    let repoSample = 'const utils = require(\'../../bin/utils.js\');\n' +
+    let repoSample = 'const utils = require(\'';
+        if(process.env.DEV == "TRUE"){
+            repoSample += '../../bin/utils.js'
+        } else {
+            repoSample += '/simple-dao-generator/bin/utils.js'
+        }
+
+    repoSample += '\');\n' +
         'const connection = utils.getConnection();\n'
            + 'const {'+className+'} = require(\'../entity/'+className+'.js\');  '
     repoSample += "\nclass " + className + "DAO{\n"
@@ -210,9 +217,14 @@ async function createServer(){
         if (!fs.existsSync('./src')) {
             fs.mkdirSync('./src');
             fs.mkdirSync('./src/server');
+            fs.mkdirSync('./src/server/routes');
         }
         else if(!fs.existsSync('./src/server')){
             fs.mkdirSync('./src/server')
+            fs.mkdirSync('./src/server/routes');
+        }
+        else if(!fs.existsSync('./src/server/routes')){
+            fs.mkdirSync('./src/server/routes')
         }
     } catch (err) {
         console.error(err);
@@ -239,13 +251,6 @@ async function createServer(){
 }
 async function createRoute(){
     let tableList = await getTable();
-    try {
-        if (!fs.existsSync('./src/server/routes')) {
-            fs.mkdirSync('./src/server/routes');
-        }
-    } catch (err) {
-        console.error(err);
-    }
     tableList.map(async tableName => {
         let tableDetails = await getTableDetails(tableName);
         let tableData = "const router = require('express').Router();\n" +
@@ -306,16 +311,24 @@ async function createRoute(){
 
 }
 
-
+function initPackage(){
+    let data = "DATABASE_URL=\"mysql://root:@127.0.0.1:3306/newDB\"\n" +
+        "DATABASE_USER=\"root\"\n" +
+        "DATABASE_PASSWORD=\"\"\n" +
+        "DATABASE_HOST=\"127.0.0.1\"\n" +
+        "DATABASE_PORT=\"3306\"\n" +
+        "DATABASE_NAME=\"newdb\""
+    fs.writeFile('./.env', data, function (err){
+        if(err) throw err;
+    })
+}
 
 module.exports = {
     getConnection,
     createDatabase,
     deleteDatabase,
-    getDatabaseList,
-    getTable,
-    getTableDetails,
     createEntity,
     createServer,
-    createRoute
+    createRoute,
+    initPackage
 }

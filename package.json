@@ -1,5 +1,6 @@
 {
-  "name": "simple-dao",
+  "name": "simple-dao-generator",
+  "author": "",
   "version": "1.0.0",
   "description": "",
   "main": "bin/index.js",
@@ -10,9 +11,8 @@
     "cli"
   ],
   "bin": {
-    "dao-test": "./bin/index.js"
+    "DAOGEN": "./bin/index.js"
   },
-  "author": "",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^16.0.3",
