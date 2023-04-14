@@ -257,7 +257,7 @@ async function createRoute(){
             `const {${tableName}DAO} = require('../../DAO/${tableName}DAO.js')\n` +
             `const {${tableName}} = require('../../entity/${tableName}')\n` +
 
-            "router.get('/all', function (req, res){\n" +
+            "router.get('/', function (req, res){\n" +
             "    res.append('Content-Type', 'application/json');\n" +
             "    (async ()=> {\n" +
             `        let ${tableName}Dao = new ${tableName}DAO()\n` +
@@ -267,7 +267,7 @@ async function createRoute(){
             "})\n" +
             "\n" +
 
-            "router.get('/one/:id', function (req, res){\n" +
+            "router.get('/:id', function (req, res){\n" +
             "    res.append('Content-Type', 'application/json');\n" +
             "    (async ()=> {\n" +
             `        let ${tableName}Dao = new ${tableName}DAO()\n` +
@@ -277,7 +277,7 @@ async function createRoute(){
             "})\n" +
             "\n";
 
-            tableData += "router.post('/new', function (req, res){\n" +
+            tableData += "router.post('/', function (req, res){\n" +
             "    res.append('Content-Type', 'application/json');\n" +
             `    let new${tableName} = new ${tableName}();\n`;
                 tableDetails.map(params => {
@@ -293,7 +293,7 @@ async function createRoute(){
             "    })();\n" +
             "})\n"
                 tableData +=
-            "router.post('/delete/:id', function (req, res){\n" +
+            "router.delete('/:id', function (req, res){\n" +
             "    res.append('Content-Type', 'application/json');\n" +
             "    (async ()=> {\n" +
             `        let ${tableName}Dao = new ${tableName}DAO()\n ` +
