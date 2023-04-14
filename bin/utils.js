@@ -128,7 +128,7 @@ async function DAOSample(className){
         if(process.env.DEV == "TRUE"){
             repoSample += '../../bin/utils.js'
         } else {
-            repoSample += '/simple-dao-generator/bin/utils.js'
+            repoSample += 'simple-dao-generator/bin/utils.js'
         }
 
     repoSample += '\');\n' +
