@@ -50,17 +50,17 @@ For this example, we have a table with users:
 
 <h3>Routes List </h3>
 
-To get all users:
+To get all users: [GET]
 
-	127.0.0.1:3000/users/all
+	127.0.0.1:3000/users
 	
 To get one user: [GET]
 	
-	127.0.0.1:3000/users/one/{id}
+	127.0.0.1:3000/users/{id}
 	
 To create a new user: [POST]
 
-	127.0.0.1:3000/users/new
+	127.0.0.1:3000/users
 	
 	with a body where you find data related to your user (example.) :
 	
@@ -71,8 +71,8 @@ To create a new user: [POST]
     		"city" : "Toulon"
 		}
 
-To delete a user :
+To delete a user : [DELETE]
 
-	127.0.0.1:3000/users/delete/{id}
+	127.0.0.1:3000/users/{id}
 	
 	
