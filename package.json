@@ -1,7 +1,7 @@
 {
   "name": "simple-dao-generator",
   "author": "",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "",
   "main": "bin/index.js",
   "scripts": {
