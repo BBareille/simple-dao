@@ -284,7 +284,7 @@ async function createRoute(){
             "    (async ()=> {\n" +
             `        let ${tableName}Dao = new ${tableName}DAO()\n` +
             `        let ${tableName}List = (await ${tableName}Dao.save${tableName}(new${tableName}))\n ` +
-            `       res.send('+JSON.stringify(${tableName}List)+')\n` +
+            `       res.send(JSON.stringify(${tableName}List))\n` +
             "    })();\n" +
             "})\n"
                 tableData +=

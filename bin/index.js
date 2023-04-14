@@ -8,16 +8,10 @@ const options = yargs
     .option("databaseList", {alias : "dl", describe: "List all database", demandOption: false})
     .option("createDatabase", {alias : "cd", describe: "Create database", demandOption: false})
     .option("dropDatabase", {alias : "dd", describe: "Delete database", demandOption: false})
-    .option('test')
+    .option("createDAO", {alias : "CDAO", describe: "Create DAO & model from database", demandOption: false})
+    .option("createServer", {alias : "CS", describe: "Create express server w/ route", demandOption: false})
     .help(true)
     .argv;
-
-
-
-if(yargs.argv.dl == true || yargs.argv.databaseList == true){
-    utils.getDatabaseList();
-    return;
-}
 
 if(yargs.argv.cd == true || yargs.argv.createDatabase == true){
     utils.createDatabase();
@@ -27,24 +21,14 @@ if(yargs.argv.dd == true || yargs.argv.dropDatabase == true){
     utils.deleteDatabase();
     return;
 }
-if(yargs.argv.gt == true || yargs.argv.getTable == true){
-    utils.getTable();
-    return;
-}
-if(yargs.argv.gtd == true || yargs.argv.getTableDetails == true){
-    utils.getTableDetails();
-    return;
-}
-if(yargs.argv.ce == true || yargs.argv.createEntity == true){
+if(yargs.argv.CDAO == true || yargs.argv.createDAO == true){
     utils.createEntity();
     return;
 }
 if(yargs.argv.createServer == true) {
     utils.createServer();
-    return;
-}
-if(yargs.argv.createRoute == true) {
     utils.createRoute();
+    console.log('Use : \n\tnpm run startServ\n\nThanks to use my lib !')
     return;
 }
 
